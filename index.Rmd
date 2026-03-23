@@ -15,3 +15,48 @@ I am interested in exploring data related to...
 AI
 Natural disasters
 Biodiversity loss/extinction
+Crime
+
+## Data Set/Research Question
+
+My research question is, do areas with higher poverty rates experience higher crime rates. I hypothesize that areas with higher poverty rates will have higher crime rates because economic strain can increase incentives for criminal behavior, and communities with fewer resources may have less capacity to prevent crime. My explanatory variable is the poverty rate, measured as the percentage of the population living below the poverty line, and the outcome variable is the crime rate, measured as the rater of crime in each state. There is variation in poverty rates across areas, which allows for analysis of patterns. If the data show that crime rates increase as poverty rates increase, this would support my hypothesis, whereas if there is no relationship or a negative relationship between poverty and crime, it would disprove the hypothesis.
+
+
+## Loading Data
+```{r}
+library(tidyverse)
+poverty <- read_csv("data/poverty.csv", skip = 4)
+crime <- read_csv("data/crime.csv")
+head(poverty)
+head(crime)
+```
+
+## Milestone 3
+
+```{r milestone-3, message=FALSE, warning=FALSE}
+library(tidyverse)
+poverty <- read_csv("data/poverty.csv", skip = 4)
+crime <- read_csv("data/crime.csv")
+
+cleaned_data <- crime %>%
+  filter(Year == 2019) %>%
+  select(State, violent_crime_rate = `Data.Rates.Violent.All`) %>%
+  inner_join(poverty, by = "State") %>%
+  rename(poverty_rate = `Value (Percent)`) %>%
+  filter(State != "United States")
+ggplot(data = cleaned_data, aes(x = poverty_rate, y = violent_crime_rate)) +
+  geom_point(color = "steelblue", size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", color = "darkred", se = FALSE) + # Adds a trend line
+  labs(
+    title = "The Relationship Between Poverty and Violent Crime (2019)",
+    x = "Percentage of Families Below Poverty Line",
+    y = "Violent Crime Rate (per 100,000 people)",
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(face = "bold")
+  )
+```
+
+

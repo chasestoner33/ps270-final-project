@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["data/crime.csv","data/poverty.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/milestone-3-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1548,8 +1548,78 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>I am interested in exploring data related to…
 AI
 Natural disasters
-Biodiversity loss/extinction</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+Biodiversity loss/extinction
+Crime</p>
+<h2 id="data-setresearch-question">Data Set/Research Question</h2>
+<p>My research question is, do areas with higher poverty rates experience higher crime rates. I hypothesize that areas with higher poverty rates will have higher crime rates because economic strain can increase incentives for criminal behavior, and communities with fewer resources may have less capacity to prevent crime. My explanatory variable is the poverty rate, measured as the percentage of the population living below the poverty line, and the outcome variable is the crime rate, measured as the rater of crime in each state. There is variation in poverty rates across areas, which allows for analysis of patterns. If the data show that crime rates increase as poverty rates increase, this would support my hypothesis, whereas if there is no relationship or a negative relationship between poverty and crime, it would disprove the hypothesis.</p>
+<h2 id="loading-data">Loading Data</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='va'>poverty</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/poverty.csv"</span>, skip <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
+<span><span class='va'>crime</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/crime.csv"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>poverty</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 5
+  State         FIPS  `Value (Percent)` `Families (Below Poverty)`
+  &lt;chr&gt;         &lt;chr&gt;             &lt;dbl&gt;                      &lt;dbl&gt;
+1 United States 00000               8.7                    7176933
+2 Puerto Rico   72001              38.2                     304614
+3 Mississippi   28000              14.3                     105525
+4 Louisiana     22000              14.2                     159527
+5 New Mexico    35000              13.7                      69601
+6 West Virginia 54000              11.9                      53766
+# ℹ 1 more variable: `Rank within US (of 52 states)` &lt;chr&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>crime</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 21
+  State    Year Data.Population Data.Rates.Property.All
+  &lt;chr&gt;   &lt;dbl&gt;           &lt;dbl&gt;                   &lt;dbl&gt;
+1 Alabama  1960         3266740                   1035.
+2 Alabama  1961         3302000                    986.
+3 Alabama  1962         3358000                   1067 
+4 Alabama  1963         3347000                   1151.
+5 Alabama  1964         3407000                   1359.
+6 Alabama  1965         3462000                   1393.
+# ℹ 17 more variables: Data.Rates.Property.Burglary &lt;dbl&gt;,
+#   Data.Rates.Property.Larceny &lt;dbl&gt;,
+#   Data.Rates.Property.Motor &lt;dbl&gt;, Data.Rates.Violent.All &lt;dbl&gt;,
+#   Data.Rates.Violent.Assault &lt;dbl&gt;,
+#   Data.Rates.Violent.Murder &lt;dbl&gt;, Data.Rates.Violent.Rape &lt;dbl&gt;,
+#   Data.Rates.Violent.Robbery &lt;dbl&gt;, Data.Totals.Property.All &lt;dbl&gt;,
+#   Data.Totals.Property.Burglary &lt;dbl&gt;, …</code></pre>
+</div>
+<h2 id="milestone-3">Milestone 3</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='va'>poverty</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/poverty.csv"</span>, skip <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
+<span><span class='va'>crime</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/crime.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>cleaned_data</span> <span class='op'>&lt;-</span> <span class='va'>crime</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>==</span> <span class='fl'>2019</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>State</span>, violent_crime_rate <span class='op'>=</span> <span class='va'>`Data.Rates.Violent.All`</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>poverty</span>, by <span class='op'>=</span> <span class='st'>"State"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>poverty_rate <span class='op'>=</span> <span class='va'>`Value (Percent)`</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>State</span> <span class='op'>!=</span> <span class='st'>"United States"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>cleaned_data</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>poverty_rate</span>, y <span class='op'>=</span> <span class='va'>violent_crime_rate</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"steelblue"</span>, size <span class='op'>=</span> <span class='fl'>3</span>, alpha <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, color <span class='op'>=</span> <span class='st'>"darkred"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span> <span class='co'># Adds a trend line</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span></span>
+<span>    title <span class='op'>=</span> <span class='st'>"The Relationship Between Poverty and Violent Crime (2019)"</span>,</span>
+<span>    x <span class='op'>=</span> <span class='st'>"Percentage of Families Below Poverty Line"</span>,</span>
+<span>    y <span class='op'>=</span> <span class='st'>"Violent Crime Rate (per 100,000 people)"</span>,</span>
+<span>  <span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span></span>
+<span>    plot.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span>, size <span class='op'>=</span> <span class='fl'>14</span><span class='op'>)</span>,</span>
+<span>    axis.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span></span>
+<span>  <span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/milestone-3-1.png" alt="" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
