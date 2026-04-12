@@ -59,4 +59,35 @@ ggplot(data = cleaned_data, aes(x = poverty_rate, y = violent_crime_rate)) +
   )
 ```
 
+## Milestone 4
+
+```{r}
+poverty <- read_csv("data/poverty.csv", skip = 4)
+crime <- read_csv("data/crime.csv")
+analysis_data <- crime %>%
+  filter(Year == 2019) %>%
+  select(State, violent_crime_rate = `Data.Rates.Violent.All`) %>%
+  inner_join(poverty, by = "State") %>%
+  rename(poverty_rate = `Value (Percent)`) %>%
+  filter(State != "United States")
+analysis_table <- analysis_data %>%
+  mutate(poverty_level = ifelse(poverty_rate > median(poverty_rate), 
+                                "High Poverty States", 
+                                "Low Poverty States")) %>%
+  group_by(poverty_level) %>%
+  summarize(
+    avg_poverty_pct = mean(poverty_rate),
+    avg_crime_rate = mean(violent_crime_rate),
+    state_count = n()
+  )
+analysis_table %>%
+  knitr::kable(
+    digits = 2,
+    col.names = c("Poverty Group", "Avg Poverty (%)", "Avg Violent Crime Rate", "Number of States"),
+    caption = "Summary Analysis: Poverty Groups and Crime Rates"
+  )
+```
+
+## Analysis 
+The table indicates that states with higher poverty levels tend to experience higher average rates of violent crime, supporting the initial hypothesis
 
