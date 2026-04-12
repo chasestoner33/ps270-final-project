@@ -1619,6 +1619,68 @@ Crime</p>
 </div>
 <p><img src="index_files/figure-html5/milestone-3-1.png" alt="" width="624" /></p>
 </div>
+<h2 id="milestone-4">Milestone 4</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>poverty</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/poverty.csv"</span>, skip <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
+<span><span class='va'>crime</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/crime.csv"</span><span class='op'>)</span></span>
+<span><span class='va'>analysis_data</span> <span class='op'>&lt;-</span> <span class='va'>crime</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Year</span> <span class='op'>==</span> <span class='fl'>2019</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>State</span>, violent_crime_rate <span class='op'>=</span> <span class='va'>`Data.Rates.Violent.All`</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>poverty</span>, by <span class='op'>=</span> <span class='st'>"State"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>poverty_rate <span class='op'>=</span> <span class='va'>`Value (Percent)`</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>State</span> <span class='op'>!=</span> <span class='st'>"United States"</span><span class='op'>)</span></span>
+<span><span class='va'>analysis_table</span> <span class='op'>&lt;-</span> <span class='va'>analysis_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>poverty_level <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>poverty_rate</span> <span class='op'>&gt;</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>poverty_rate</span><span class='op'>)</span>, </span>
+<span>                                <span class='st'>"High Poverty States"</span>, </span>
+<span>                                <span class='st'>"Low Poverty States"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>poverty_level</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span></span>
+<span>    avg_poverty_pct <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>poverty_rate</span><span class='op'>)</span>,</span>
+<span>    avg_crime_rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>violent_crime_rate</span><span class='op'>)</span>,</span>
+<span>    state_count <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span>  <span class='op'>)</span></span>
+<span><span class='va'>analysis_table</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span></span>
+<span>    digits <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span>    col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Poverty Group"</span>, <span class='st'>"Avg Poverty (%)"</span>, <span class='st'>"Avg Violent Crime Rate"</span>, <span class='st'>"Number of States"</span><span class='op'>)</span>,</span>
+<span>    caption <span class='op'>=</span> <span class='st'>"Summary Analysis: Poverty Groups and Crime Rates"</span></span>
+<span>  <span class='op'>)</span></span></code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Summary Analysis: Poverty Groups and Crime Rates</caption>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 21%" />
+<col style="width: 30%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Poverty Group</th>
+<th style="text-align: right;">Avg Poverty (%)</th>
+<th style="text-align: right;">Avg Violent Crime Rate</th>
+<th style="text-align: right;">Number of States</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">High Poverty States</td>
+<td style="text-align: right;">10.26</td>
+<td style="text-align: right;">457.77</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Low Poverty States</td>
+<td style="text-align: right;">6.60</td>
+<td style="text-align: right;">303.03</td>
+<td style="text-align: right;">26</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="analysis">Analysis</h2>
+<p>The table indicates that states with higher poverty levels tend to experience higher average rates of violent crime, supporting the initial hypothesis</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
