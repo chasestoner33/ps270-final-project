@@ -1544,15 +1544,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="project-thoughts">Project thoughts</h2>
-<p>I am interested in exploring data related to…
-AI
-Natural disasters
-Biodiversity loss/extinction
-Crime</p>
-<h2 id="data-setresearch-question">Data Set/Research Question</h2>
+<h2 id="introduction">Introduction</h2>
 <p>My research question is, do areas with higher poverty rates experience higher crime rates. I hypothesize that areas with higher poverty rates will have higher crime rates because economic strain can increase incentives for criminal behavior, and communities with fewer resources may have less capacity to prevent crime. My explanatory variable is the poverty rate, measured as the percentage of the population living below the poverty line, and the outcome variable is the crime rate, measured as the rater of crime in each state. There is variation in poverty rates across areas, which allows for analysis of patterns. If the data show that crime rates increase as poverty rates increase, this would support my hypothesis, whereas if there is no relationship or a negative relationship between poverty and crime, it would disprove the hypothesis.</p>
-<h2 id="loading-data">Loading Data</h2>
+<h2 id="data-section">Data Section</h2>
+<p>This study uses a cross-sectional research design, analyzing data from 50 U.S. states for the year 2019. I merged two primary data sources, using the U.S. Census Bureau for poverty statistics and the FBI Uniform Crime Reporting (UCR) program for violent crime rates. The independent variable is poverty rate, measured as the percentage of families living below the federal poverty line in each state. The dependent variable is crime rate, measured as the number of violent crimes per 100,000 people. My hypothesis will be supported if the regression analysis shows a positive, statistically significant relationship between poverty and crime.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
@@ -1590,7 +1585,7 @@ Crime</p>
 #   Data.Rates.Violent.Robbery &lt;dbl&gt;, Data.Totals.Property.All &lt;dbl&gt;,
 #   Data.Totals.Property.Burglary &lt;dbl&gt;, …</code></pre>
 </div>
-<h2 id="milestone-3">Milestone 3</h2>
+<p>Results</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
@@ -1619,7 +1614,6 @@ Crime</p>
 </div>
 <p><img src="index_files/figure-html5/milestone-3-1.png" alt="" width="624" /></p>
 </div>
-<h2 id="milestone-4">Milestone 4</h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>poverty</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/poverty.csv"</span>, skip <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
@@ -1679,9 +1673,43 @@ Crime</p>
 </tbody>
 </table>
 </div>
-<h2 id="analysis">Analysis</h2>
-<p>The table indicates that states with higher poverty levels tend to experience higher average rates of violent crime, supporting the initial hypothesis</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/infer'>infer</a></span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>53706</span><span class='op'>)</span></span>
+<span><span class='va'>crime_diff</span> <span class='op'>&lt;-</span> <span class='va'>cleaned_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/specify.html'>specify</a></span><span class='op'>(</span><span class='va'>violent_crime_rate</span> <span class='op'>~</span> <span class='va'>poverty_rate</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/calculate.html'>calculate</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"slope"</span><span class='op'>)</span></span>
+<span><span class='va'>null_dist</span> <span class='op'>&lt;-</span> <span class='va'>cleaned_data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/specify.html'>specify</a></span><span class='op'>(</span><span class='va'>violent_crime_rate</span> <span class='op'>~</span> <span class='va'>poverty_rate</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/hypothesize.html'>hypothesize</a></span><span class='op'>(</span>null <span class='op'>=</span> <span class='st'>"independence"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/generate.html'>generate</a></span><span class='op'>(</span>reps <span class='op'>=</span> <span class='fl'>1000</span>, type <span class='op'>=</span> <span class='st'>"permute"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/calculate.html'>calculate</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"slope"</span><span class='op'>)</span></span>
+<span><span class='va'>crime_pval</span> <span class='op'>&lt;-</span> <span class='va'>null_dist</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/get_p_value.html'>get_p_value</a></span><span class='op'>(</span>obs_stat <span class='op'>=</span> <span class='va'>crime_diff</span>, direction <span class='op'>=</span> <span class='st'>"two-sided"</span><span class='op'>)</span></span>
+<span><span class='va'>crime_pval</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 × 1
+  p_value
+    &lt;dbl&gt;
+1   0.004</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>crime_diff</span></span></code></pre>
+</div>
+<pre><code>Response: violent_crime_rate (numeric)
+Explanatory: poverty_rate (n...
+# A tibble: 1 × 1
+   stat
+  &lt;dbl&gt;
+1  36.4</code></pre>
+</div>
+<p>The relationship between poverty and violent crime is first illustrated by the scatter plot which displays a clear positive correlation between the percentage of people below the poverty line and the rate of violent crimes. The red trend line slopes upward, suggesting that as poverty increases at the state level, violent crime rates typically follow. This visual evidence is further supported by the summary analysis which shows that high poverty states have a substantially higher average violent crime rate compared to low poverty states.
+To test this relationship, I calculated a regression slope and a simulation based p-value. The main coefficient of interest, represented as the stat in the crime_diff output, measures the predicted change in the violent crime rate for every one percentage point increase in a state’s poverty rate. This observed slope is statistically significant, as the resulting p_value of 0.004 is well below the significance level of 0.05. This low p-value suggests that the observed positive relationship is highly unlikely to have occurred by chance, providing strong evidence to reject the null hypothesis.
+These results suggest that poverty is a meaningful predictor of violent crime at the state level. However, despite the statistical significance, we should not interpret this relationship as strictly causal as there is chance for bias.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The results of this study provide strong support for the hypothesis that higher poverty rates are associated with higher rates of violent crime across U.S. states. As shown, the relationship is statistically significant with a p-value of 0.004, meaning we can reject the null hypothesis that these variables are independent. However, this analysis has important limitations, primarily the risk of confounding variables such as differences in state-level education, urbanization, or police staffing that were not accounted for in this simple model. Furthermore, as a cross-sectional study of 2019 data, it cannot definitively prove a causal link or account for changes over time. To improve this analysis, I would use additional funding to collect data over several decades and include a wider array of control variables to better isolate the specific impact of poverty on crime rate.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
